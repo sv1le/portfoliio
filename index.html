@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MCA Portfolio | Internet & Web Technologies Lab</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: rgba(255,255,255,0.08);
+      --text: #f5f7ff;
+      --muted: #aab7d0;
+      --primary: #7c5cff;
+      --secondary: #22d3ee;
+      --accent: #ff6b6b;
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    body.light {
+      --bg: #f4f7ff;
+      --surface: rgba(255,255,255,0.75);
+      --text: #14213d;
+      --muted: #4d5b7a;
+      --primary: #5b3df2;
+      --secondary: #0891b2;
+      --accent: #ff5d8f;
+      --shadow: 0 20px 50px rgba(108, 96, 196, 0.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(circle at top left, rgba(124,92,255,0.25), transparent 28%),
+                  radial-gradient(circle at bottom right, rgba(34,211,238,0.18), transparent 30%),
+                  var(--bg);
+      color: var(--text);
+      transition: background 0.3s ease, color 0.3s ease;
+      line-height: 1.7;
+    }
+
+    .container {
+      width: min(1150px, 90%);
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(18px);
+      background: rgba(7, 17, 31, 0.75);
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    body.light header { background: rgba(244,247,255,0.8); }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+    }
+
+    .brand {
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--secondary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.5rem 0.8rem;
+      border-radius: 999px;
+      transition: all 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      background: var(--surface);
+      transform: translateY(-2px);
+    }
+
+    .theme-btn {
+      border: none;
+      padding: 0.6rem 0.9rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 5rem 0 3rem;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .hero-card, .card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--shadow);
+      border-radius: 24px;
+      padding: 1.5rem;
+      backdrop-filter: blur(16px);
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 0.8rem;
+    }
+
+    .hero .tag {
+      display: inline-block;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(124,92,255,0.2);
+      color: var(--secondary);
+      margin-bottom: 1rem;
+      font-size: 0.94rem;
+    }
+
+    .hero p { color: var(--muted); margin-bottom: 1rem; }
+
+    .btn-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      text-decoration: none;
+      padding: 0.8rem 1.1rem;
+      border-radius: 999px;
+      font-weight: 600;
+      transition: transform 0.25s ease;
+      display: inline-block;
+    }
+
+    .btn:hover { transform: translateY(-3px); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+    .btn-outline { border: 1px solid var(--secondary); color: var(--secondary); }
+
+    .feature-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 360px;
+      display: grid;
+      place-items: center;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(10px);
+      opacity: 0.8;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .orb.one { width: 180px; height: 180px; background: var(--primary); top: 50px; right: 40px; }
+    .orb.two { width: 150px; height: 150px; background: var(--secondary); bottom: 50px; left: 30px; animation-delay: 1s; }
+    .orb.three { width: 100px; height: 100px; background: var(--accent); top: 20px; left: 50px; animation-delay: 2s; }
+
+    .profile-box {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 320px;
+      padding: 2rem;
+      text-align: center;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.16);
+      backdrop-filter: blur(12px);
+    }
+
+    .profile-box h3 { font-size: 1.25rem; margin-bottom: 0.4rem; }
+    .profile-box p { color: var(--muted); margin-bottom: 0.8rem; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .stat {
+      padding: 0.7rem;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .stat strong { display: block; font-size: 1.1rem; }
+
+    section { padding: 2.2rem 0; }
+    h2 { margin-bottom: 1rem; font-size: 1.5rem; }
+
+    .grid { display: grid; gap: 1rem; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .card:hover {
+      transform: translateY(-6px);
+      transition: transform 0.3s ease;
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+    }
+
+    .pill {
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(34,211,238,0.14);
+      color: var(--secondary);
+      font-size: 0.95rem;
+    }
+
+    .project-list li, .lab-list li {
+      margin-left: 1.2rem;
+      margin-bottom: 0.4rem;
+      color: var(--muted);
+    }
+
+    .timeline-item {
+      padding-left: 1rem;
+      border-left: 2px solid rgba(124,92,255,0.35);
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -7px;
+      top: 0.3rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--secondary);
+    }
+
+    .experience-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .experience-item {
+      padding: 1rem 1.2rem;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .experience-item h3 {
+      margin-bottom: 0.3rem;
+      color: var(--secondary);
+    }
+
+    .experience-item .meta {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 0 3rem;
+      color: var(--muted);
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">MCA Portfolio</div>
+        <div class="nav-links">
+          <a href="#about">About</a>
+          <a href="#labs">Lab Work</a>
+          <a href="#experience">Experience</a>
+          <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()">☀︎ / ☾</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-card">
+        <span class="tag">Pondicherry University • MCA</span>
+        <h1>Hi, I’m <span style="color:var(--secondary);">Siddhartha Saha</span></h1>
+        <p>I am pursuing my MCA degree at Pondicherry University and building a strong foundation in Internet and Web Technologies through hands-on laboratory work, creative web design, and practical projects.</p>
+        <p>This portfolio highlights my understanding of web development concepts, lab experiments, and project-based learning in a modern and interactive format.</p>
+        <div class="btn-row">
+          <a href="online_shopping.html" target="_blank" class="btn btn-primary">Open Shopping Page</a>
+          <a href="#projects" class="btn btn-outline">View Projects</a>
+          <a href="#contact" class="btn btn-outline">Contact Me</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="orb one"></div>
+        <div class="orb two"></div>
+        <div class="orb three"></div>
+        <div class="profile-box">
+          <h3>Internet & Web Technologies</h3>
+          <p>Lab Portfolio</p>
+          <div class="stats">
+            <div class="stat"><strong>HTML</strong><span>5</span></div>
+            <div class="stat"><strong>CSS</strong><span>4</span></div>
+            <div class="stat"><strong>JS</strong><span>4</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="card feature-banner">
+        <div>
+          <span class="tag">Featured Project</span>
+          <h3 style="margin-top: 0.4rem;">Interactive Online Shopping Page</h3>
+          <p style="margin-bottom: 0;">A modern storefront with live search, category filters, quick view, cart actions, and a coupon system.</p>
+        </div>
+        <div class="btn-row">
+          <a href="online_shopping.html" target="_blank" class="btn btn-primary">Open Project</a>
+          <a href="#projects" class="btn btn-outline">See All Projects</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <h2>About Me</h2>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Personal Profile</h3>
+          <p>I am an MCA student with a strong interest in developing dynamic, responsive, and user-friendly websites. My focus is on combining design aesthetics with functional web development to create meaningful digital experiences.</p>
+        </div>
+        <div class="card">
+          <h3>Academic Focus</h3>
+          <p>My academic journey has emphasized web design, client-side scripting, server-side development, and the practical implementation of internet-based technologies in real-world applications.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="labs">
+      <h2>Internet & Web Technologies Lab Work</h2>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>HTML & CSS</h3>
+          <p>Created structured web pages using semantic tags, forms, tables, lists, and responsive layouts with modern CSS styling.</p>
+          <div class="pill-list">
+            <span class="pill">Semantic HTML</span>
+            <span class="pill">Flexbox</span>
+            <span class="pill">Grid</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>JavaScript</h3>
+          <p>Implemented interactive UI features such as form validation, dynamic content updates, animations, and event handling.</p>
+          <div class="pill-list">
+            <span class="pill">DOM</span>
+            <span class="pill">Events</span>
+            <span class="pill">Functions</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Web Development Concepts</h3>
+          <p>Explored internet protocols, web servers, client-server architecture, XML/JSON, and modern browser-based applications.</p>
+          <div class="pill-list">
+            <span class="pill">HTTP</span>
+            <span class="pill">JSON</span>
+            <span class="pill">XML</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <h2>Experience Timeline</h2>
+      <div class="experience-list">
+        <div class="experience-item">
+          <h3>Web Developer Intern</h3>
+          <div class="meta">TechNova Solutions • Jun 2024 – Aug 2024</div>
+          <p>Built responsive landing pages, improved UI components, and assisted in front-end debugging for client websites.</p>
+        </div>
+        <div class="experience-item">
+          <h3>UI/UX Design Intern</h3>
+          <div class="meta">BrightPixel Studio • Jan 2024 – Mar 2024</div>
+          <p>Created wireframes, designed interactive mockups, and collaborated on user-friendly interface improvements.</p>
+        </div>
+        <div class="experience-item">
+          <h3>Software Intern</h3>
+          <div class="meta">CodeBridge Labs • Sep 2023 – Dec 2023</div>
+          <p>Worked on small web applications, learned team workflows, and contributed to testing and documentation tasks.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>Projects & Practical Work</h2>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>Personal Portfolio Website</h3>
+          <p>Designed a visually appealing personal portfolio with sections for about, skills, projects, and contact information.</p>
+          <ul class="project-list">
+            <li>Responsive layout</li>
+            <li>Interactive navigation</li>
+            <li>Modern color palette</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Interactive Online Shopping Page</h3>
+          <p>Created a polished e-commerce-style webpage with product filters, search, add-to-cart actions, quick view, and a coupon system.</p>
+          <ul class="project-list">
+            <li>Live product search</li>
+            <li>Category-based filtering</li>
+            <li>Cart and checkout interactions</li>
+          </ul>
+          <a href="online_shopping.html" target="_blank" class="btn btn-outline" style="margin-top: 1rem;">Open Project</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Technical Skills</h3>
+          <div class="pill-list">
+            <span class="pill">HTML5</span>
+            <span class="pill">CSS3</span>
+            <span class="pill">JavaScript</span>
+            <span class="pill">Bootstrap</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Soft Skills</h3>
+          <div class="pill-list">
+            <span class="pill">Problem Solving</span>
+            <span class="pill">Creativity</span>
+            <span class="pill">Time Management</span>
+            <span class="pill">Teamwork</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <div class="card">
+        <p><strong>Name:</strong>Siddhartha Saha</p>
+        <p><strong>University:</strong> Pondicherry University</p>
+        <p><strong>Course:</strong> MCA</p>
+        <p><strong>Specialization:</strong> DSA</p>
+        <p><strong>Email:</strong> sidsahano1@gmail.com</p>
+        <p><strong>LinkedIn:</strong> linkedin.com/in/insiddhartha</p>
+      </div>
+    </section>
+  </main>
+
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('light');
+    }
+  </script>
+</body>
+</html>

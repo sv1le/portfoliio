@@ -131,33 +131,28 @@
   </div>
 
   <script>
-    const questions = [
-      { question: 'What does HTML stand for?', options: ['Hyper Text Markup Language', 'High Text Machine Language', 'Hyper Tool Makeup Language', 'Home Tool Markup Language'], answer: 0 },
-      { question: 'Which tag is used to create a hyperlink?', options: ['<link>', '<a>', '<href>', '<url>'], answer: 1 },
-      { question: 'Which CSS property changes text color?', options: ['background-color', 'font-size', 'color', 'margin'], answer: 2 },
-      { question: 'Which property controls the space outside an element?', options: ['padding', 'margin', 'border', 'display'], answer: 1 },
-      { question: 'What does CSS stand for?', options: ['Creative Style Sheets', 'Cascading Style Sheets', 'Computer Style Syntax', 'Colorful Style System'], answer: 1 },
-      { question: 'Which HTML tag is used for the largest heading?', options: ['<h6>', '<h1>', '<head>', '<header>'], answer: 1 },
-      { question: 'Which JavaScript keyword declares a variable?', options: ['var', 'loop', 'function', 'if'], answer: 0 },
-      { question: 'What is the correct way to write an IF statement in JavaScript?', options: ['if i = 5', 'if (i == 5)', 'if {i == 5}', 'if i == 5 then'], answer: 1 },
-      { question: 'Which symbol is used for comments in JavaScript?', options: ['<!-- -->', '//', '/* */', 'Both // and /* */'], answer: 3 },
-      { question: 'Which method is used to print output in the browser console?', options: ['console.log()', 'print()', 'document.write()', 'alert()'], answer: 0 },
-      { question: 'Which HTML attribute is used to define the image source?', options: ['src', 'href', 'alt', 'class'], answer: 0 },
-      { question: 'What does the CSS flexbox property help with?', options: ['Create animations', 'Control layout', 'Store data', 'Handle files'], answer: 1 },
-      { question: 'Which value makes an element take full width?', options: ['width: 100%', 'width: auto', 'width: fit-content', 'width: 0'], answer: 0 },
-      { question: 'Which JavaScript function is used to create a popup box?', options: ['prompt()', 'confirm()', 'alert()', 'message()'], answer: 2 },
-      { question: 'Which HTML tag is used to insert a line break?', options: ['<br>', '<lb>', '<break>', '<line>'], answer: 0 },
-      { question: 'Which CSS property changes the size of text?', options: ['font-size', 'text-color', 'font-family', 'padding'], answer: 0 },
-      { question: 'Which HTML tag is used to create an unordered list?', options: ['<ol>', '<list>', '<ul>', '<li>'], answer: 2 },
-      { question: 'Which JavaScript operator compares both value and type?', options: ['===', '==', '!=', '='], answer: 0 },
-      { question: 'Which HTML element is used to define a form?', options: ['<form>', '<input>', '<button>', '<section>'], answer: 0 },
-      { question: 'Which CSS property makes text bold?', options: ['font-style', 'font-weight', 'text-align', 'line-height'], answer: 1 }
-    ];
+    let questions = [];
 
     const questionsContainer = document.getElementById('questions');
     const quizForm = document.getElementById('quizForm');
     const result = document.getElementById('result');
     const resetBtn = document.getElementById('resetBtn');
+
+    async function loadQuestions() {
+      const response = await fetch('questions.txt');
+      const text = await response.text();
+      const lines = text.trim().split('\n');
+
+      questions = lines.map((line) => {
+        const parts = line.split('|');
+        const question = parts[0].replace(/^\d+\.\s*/, '');
+        const options = parts.slice(1, 5);
+        const answer = Number(parts[5]);
+        return { question, options, answer };
+      });
+
+      renderQuestions();
+    }
 
     function renderQuestions() {
       questionsContainer.innerHTML = questions.map((q, index) => `
@@ -204,7 +199,7 @@
       result.innerHTML = '';
     });
 
-    renderQuestions();
+    loadQuestions();
   </script>
 </body>
 </html>

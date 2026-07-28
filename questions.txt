@@ -1,0 +1,20 @@
+1. What does HTML stand for?|Hyper Text Markup Language|High Text Machine Language|Hyper Tool Makeup Language|Home Tool Markup Language|0
+2. Which tag is used to create a hyperlink?|<link>|<a>|<href>|<url>|1
+3. Which CSS property changes text color?|background-color|font-size|color|margin|2
+4. Which property controls the space outside an element?|padding|margin|border|display|1
+5. What does CSS stand for?|Creative Style Sheets|Cascading Style Sheets|Computer Style Syntax|Colorful Style System|1
+6. Which HTML tag is used for the largest heading?|<h6>|<h1>|<head>|<header>|1
+7. Which JavaScript keyword declares a variable?|var|loop|function|if|0
+8. What is the correct way to write an IF statement in JavaScript?|if i = 5|if (i == 5)|if {i == 5}|if i == 5 then|1
+9. Which symbol is used for comments in JavaScript?|<!-- -->|//|/* */|Both // and /* */|3
+10. Which method is used to print output in the browser console?|console.log()|print()|document.write()|alert()|0
+11. Which HTML attribute is used to define the image source?|src|href|alt|class|0
+12. What does the CSS flexbox property help with?|Create animations|Control layout|Store data|Handle files|1
+13. Which value makes an element take full width?|width: 100%|width: auto|width: fit-content|width: 0|0
+14. Which JavaScript function is used to create a popup box?|prompt()|confirm()|alert()|message()|2
+15. Which HTML tag is used to insert a line break?|<br>|<lb>|<break>|<line>|0
+16. Which CSS property changes the size of text?|font-size|text-color|font-family|padding|0
+17. Which HTML tag is used to create an unordered list?|<ol>|<list>|<ul>|<li>|2
+18. Which JavaScript operator compares both value and type?|===|==|!=|=|0
+19. Which HTML element is used to define a form?|<form>|<input>|<button>|<section>|0
+20. Which CSS property makes text bold?|font-style|font-weight|text-align|line-height|1

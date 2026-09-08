@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulseContacts | Modern Contact Management Application</title>
+  <meta name="description" content="Manage, view, edit, and organize your contacts with real-time search, categorization, and Firebase Cloud Firestore integration." />
+
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="contacts.css" />
+</head>
+<body>
+
+  <!-- ========================================================================
+       Top Navigation Header
+       ======================================================================== -->
+  <header class="app-header">
+    <div class="container">
+      <nav class="nav-container" aria-label="Main Application Navigation">
+        <a href="contacts.html" class="brand-wrapper" id="brand-link">
+          <div class="brand-icon" aria-hidden="true">📇</div>
+          <div class="brand-name">Pulse<span>Contacts</span></div>
+        </a>
+
+        <!-- Database Connection Indicator -->
+        <div id="db-status-badge" style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem; background: var(--surface-card); padding: 0.3rem 0.8rem; border-radius: var(--radius-full); border: 1px solid var(--border);">
+          <span class="pulse-dot" style="width: 8px; height: 8px; border-radius: 50%; background: var(--secondary);"></span>
+          Connecting to Database...
+        </div>
+
+        <div class="header-actions">
+          <button type="button" class="btn btn-outline btn-sm" id="theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+            🌓 Mode
+          </button>
+          <a href="index.html" class="btn btn-outline btn-sm" title="Back to MCA Portfolio">
+            ← Portfolio
+          </a>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-add-contact-nav">
+            + New Contact
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       Main Content Area
+       ======================================================================== -->
+  <main class="container app-hero">
+
+    <!-- Hero Header Banner -->
+    <section class="hero-banner">
+      <div class="hero-titles">
+        <h1>Contact <span style="background: linear-gradient(135deg, #6366f1, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Directory & Manager</span></h1>
+        <p>Effortlessly organize, view, edit, and maintain your personal and professional connections.</p>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-csv" title="Export current contacts to CSV">
+          📥 Export CSV
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-json" title="Export current contacts to JSON">
+          { } Export JSON
+        </button>
+        <button type="button" class="btn btn-outline btn-sm" id="btn-reset-contacts" title="Restore sample contacts">
+          🔄 Reset Sample
+        </button>
+        <button type="button" class="btn btn-primary" id="btn-add-contact-main">
+          + Add Contact
+        </button>
+      </div>
+    </section>
+
+    <!-- Key Statistics Bar -->
+    <section class="stats-bar" aria-label="Contact Statistics">
+      <div class="stat-item">
+        <div class="stat-icon primary">👥</div>
+        <div class="stat-data">
+          <h3 id="stat-total">0</h3>
+          <p>Total Contacts</p>
+        </div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-icon gold">⭐</div>
+        <div class="stat-data">
+          <h3 id="stat-favorites">0</h3>
+          <p>Starred Favorites</p>
+        </div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-icon cyan">💼</div>
+        <div class="stat-data">
+          <h3 id="stat-work">0</h3>
+          <p>Work Colleagues</p>
+        </div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-icon emerald">🤝</div>
+        <div class="stat-data">
+          <h3 id="stat-clients">0</h3>
+          <p>Client Partners</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search, Filter & View Controls -->
+    <section class="controls-card" aria-label="Search and Filter Controls">
+      <div class="controls-top-row">
+        <!-- Live Search Field -->
+        <div class="search-field">
+          <span class="search-field-icon">🔍</span>
+          <input 
+            type="text" 
+            id="contacts-search" 
+            class="search-input" 
+            placeholder="Search contacts by name, email, phone, or company..." 
+            aria-label="Search Contacts" 
+          />
+        </div>
+
+        <div class="controls-right-actions">
+          <!-- Sort Selector -->
+          <select id="contacts-sort-select" class="select-control" aria-label="Sort Contacts">
+            <option value="name-asc">Sort: Name (A to Z)</option>
+            <option value="name-desc">Sort: Name (Z to A)</option>
+            <option value="company">Sort: Company</option>
+            <option value="recent">Sort: Recently Added</option>
+          </select>
+
+          <!-- View Mode Toggle -->
+          <div class="view-mode-toggle" aria-label="Switch View Mode">
+            <button type="button" class="view-mode-btn active" id="btn-view-grid" title="Cards View">
+              🗂️ Cards
+            </button>
+            <button type="button" class="view-mode-btn" id="btn-view-table" title="Table View">
+              📑 Table
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills Row -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem;">
+        <div class="filter-pills" role="tablist" aria-label="Category Filters">
+          <button type="button" class="pill-tab active" data-category="all" role="tab">All</button>
+          <button type="button" class="pill-tab" data-category="favorites" role="tab">⭐ Favorites</button>
+          <button type="button" class="pill-tab" data-category="work" role="tab">💼 Work</button>
+          <button type="button" class="pill-tab" data-category="client" role="tab">🤝 Clients</button>
+          <button type="button" class="pill-tab" data-category="personal" role="tab">🏠 Personal</button>
+          <button type="button" class="pill-tab" data-category="family" role="tab">👨‍👩‍👧 Family</button>
+        </div>
+
+        <span id="results-count-badge" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+          Loading contacts...
+        </span>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         CONTACTS VIEW 1: CARDS GRID (Default)
+         ====================================================================== -->
+    <div id="contacts-grid-view" class="contacts-grid" aria-label="Contacts Grid">
+      <!-- Populated dynamically by contacts-app.js -->
+    </div>
+
+    <!-- ======================================================================
+         CONTACTS VIEW 2: COMPACT TABLE
+         ====================================================================== -->
+    <div id="contacts-table-view" class="table-wrapper" style="display: none;" aria-label="Contacts Table">
+      <table class="contacts-table">
+        <thead>
+          <tr>
+            <th style="width: 40px;">⭐</th>
+            <th>Contact Name</th>
+            <th>Category & Company</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th style="width: 140px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="contacts-table-body">
+          <!-- Populated dynamically by contacts-app.js -->
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <!-- ========================================================================
+       MODAL 1: ADD / EDIT CONTACT MODAL
+       ======================================================================== -->
+  <div class="modal-overlay" id="contact-form-modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" id="btn-close-form-modal" aria-label="Close modal">✕</button>
+
+      <div class="modal-header">
+        <h2 id="contact-modal-title">Add New Contact</h2>
+        <p id="contact-form-subtitle">Enter details to save to your contact directory.</p>
+      </div>
+
+      <form id="contact-form" autocomplete="on">
+        <!-- Hidden Contact ID for Edits -->
+        <input type="hidden" id="contact-form-id" value="" />
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="contact-form-first">First Name *</label>
+            <input type="text" id="contact-form-first" class="form-control" placeholder="e.g. Maya" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-form-last">Last Name</label>
+            <input type="text" id="contact-form-last" class="form-control" placeholder="e.g. Sharma" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-form-email">Email Address</label>
+            <input type="email" id="contact-form-email" class="form-control" placeholder="name@company.com" autocomplete="email" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-form-phone">Phone Number</label>
+            <input type="tel" id="contact-form-phone" class="form-control" placeholder="+91 98765 43210" autocomplete="tel" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-form-company">Company / Organization</label>
+            <input type="text" id="contact-form-company" class="form-control" placeholder="e.g. Acme Corp" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-form-designation">Designation / Role</label>
+            <input type="text" id="contact-form-designation" class="form-control" placeholder="e.g. Lead Designer" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-form-category">Category / Tag</label>
+            <select id="contact-form-category" class="form-control">
+              <option value="work">💼 Work</option>
+              <option value="client">🤝 Client</option>
+              <option value="personal">🏠 Personal</option>
+              <option value="family">👨‍👩‍👧 Family</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="display: flex; align-items: center; gap: 0.6rem; padding-top: 1.6rem;">
+            <input type="checkbox" id="contact-form-favorite" style="width: 18px; height: 18px; cursor: pointer;" />
+            <label for="contact-form-favorite" style="font-size: 0.9rem; font-weight: 600; cursor: pointer;">
+              ⭐ Star as Favorite
+            </label>
+          </div>
+
+          <div class="form-group col-span-2">
+            <label class="form-label" for="contact-form-notes">Notes & Additional Details</label>
+            <textarea id="contact-form-notes" class="form-control" placeholder="Add meeting notes, address, or relationship context..."></textarea>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border);">
+          <button type="button" class="btn btn-outline" id="btn-cancel-form">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" id="btn-save-contact">
+            Save Contact
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 2: VIEW CONTACT DETAILS MODAL
+       ======================================================================== -->
+  <div class="modal-overlay" id="contact-details-modal" role="dialog" aria-modal="true" aria-labelledby="view-name">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" id="btn-close-view-modal" aria-label="Close modal">✕</button>
+
+      <div class="profile-modal-banner">
+        <div class="profile-modal-avatar" id="view-avatar">AR</div>
+        <div class="profile-modal-title">
+          <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.2rem;">
+            <h2 id="view-name">Arun Verma</h2>
+            <span id="view-tag" class="tag-badge tag-work">Work</span>
+          </div>
+          <p id="view-company-dept">Principal Cloud Architect • TechCorp Global</p>
+        </div>
+      </div>
+
+      <div class="profile-details-grid">
+        <div class="profile-detail-card">
+          <div>
+            <div class="profile-detail-label">Phone Number</div>
+            <div class="profile-detail-value" id="view-phone-value">+91 98765 43210</div>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-call-direct" title="Call directly">
+            📞 Call
+          </button>
+        </div>
+
+        <div class="profile-detail-card">
+          <div>
+            <div class="profile-detail-label">Email Address</div>
+            <div class="profile-detail-value" id="view-email-value">arun.verma@techcorp.io</div>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-email-direct" title="Send email">
+            ✉️ Email
+          </button>
+        </div>
+
+        <div class="profile-detail-card">
+          <div>
+            <div class="profile-detail-label">Company / Workplace</div>
+            <div class="profile-detail-value" id="view-company-value">TechCorp Global</div>
+          </div>
+        </div>
+
+        <div class="profile-detail-card" style="align-items: flex-start; flex-direction: column; gap: 0.4rem;">
+          <div class="profile-detail-label">Notes & Description</div>
+          <div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;" id="view-notes-value">
+            Lead on Kubernetes migration. Available on Slack and WhatsApp.
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1.25rem; border-top: 1px solid var(--border);">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-copy-contact" title="Copy contact info to clipboard">
+          📋 Copy Info
+        </button>
+
+        <div style="display: flex; gap: 0.6rem;">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-edit-from-view">
+            ✏️ Edit
+          </button>
+          <button type="button" class="btn btn-danger btn-sm" id="btn-delete-from-view">
+            🗑️ Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- ========================================================================
+       Footer
+       ======================================================================== -->
+  <footer class="app-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <strong>PulseContacts</strong> — Comprehensive Contact Management Application with Cloud Firestore.
+        </div>
+        <div style="display: flex; gap: 1.5rem;">
+          <a href="index.html">← Back to Portfolio</a>
+          <a href="company.html">Company Portal</a>
+          <a href="#top">Top ↑</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic Module -->
+  <script type="module" src="contacts-app.js"></script>
+</body>
+</html>

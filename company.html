@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexPulse Enterprise | Corporate Portal & Role-Based Management System</title>
+  <meta name="description" content="Modern enterprise company portal featuring role-based authentication and directories for employees and administrators with Firebase." />
+
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="company.css" />
+</head>
+<body>
+
+  <!-- ========================================================================
+       Top Navigation Header
+       ======================================================================== -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar" aria-label="Main Navigation">
+        <a href="#home" class="brand-logo" id="brand-logo-link" onclick="window.location.reload()">
+          <div class="logo-icon" aria-hidden="true">⚡</div>
+          <div class="brand-text">NexPulse <span>Enterprise</span></div>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="#home" class="nav-link active" data-view="home" id="nav-home-link">Home</a></li>
+          <li><a href="#employee" class="nav-link" data-view="employee" id="nav-emp-link">Employee Portal</a></li>
+          <li><a href="#admin" class="nav-link" data-view="admin" id="nav-admin-link">Admin Dashboard</a></li>
+          <li><a href="index.html" class="nav-link" id="nav-portfolio-link">← Student Portfolio</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <!-- Theme Toggle -->
+          <button type="button" class="theme-toggle-btn" id="theme-toggle" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+            🌓
+          </button>
+
+          <!-- Guest Actions -->
+          <div id="header-guest-actions" style="display: flex; gap: 0.6rem;">
+            <button type="button" class="btn btn-outline btn-sm" id="nav-login-btn">Sign In</button>
+            <button type="button" class="btn btn-primary btn-sm" id="nav-register-btn">Register</button>
+          </div>
+
+          <!-- Logged In User Pill -->
+          <div id="header-user-actions" style="display: none; align-items: center; gap: 0.8rem;">
+            <div class="user-pill">
+              <div class="user-avatar-sm" id="header-user-avatar">AD</div>
+              <div class="user-pill-info">
+                <span class="user-pill-name" id="header-user-name">User Name</span>
+                <span class="user-pill-role badge badge-admin" id="header-user-role">ADMIN</span>
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm logout-trigger" id="header-logout-btn" title="Sign out">
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       MAIN APPLICATION VIEWS CONTAINER
+       ======================================================================== -->
+  <main id="app-main">
+
+    <!-- ======================================================================
+         VIEW 1: HOMEPAGE (Corporate Landing & Quick Portal)
+         ====================================================================== -->
+    <div id="home-view">
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="container">
+          <div class="hero-content">
+            <div>
+              <div class="hero-tag">
+                <span>🚀 NexPulse Cloud Platform</span>
+              </div>
+              <h1 class="hero-title">
+                Intelligent People Operations for <span class="gradient-text">Modern Enterprise</span>.
+              </h1>
+              <p class="hero-description">
+                Seamless corporate portal connecting employees with leadership. Built with high-security role-based authentication, interactive directories, and real-time database architecture.
+              </p>
+
+              <div class="hero-cta">
+                <button type="button" class="btn btn-primary" id="hero-open-portal-btn">
+                  Access Portal / Sign In →
+                </button>
+                <button type="button" class="btn btn-secondary" id="hero-emp-demo-btn">
+                  Employee Demo
+                </button>
+                <button type="button" class="btn btn-outline" id="hero-adm-demo-btn">
+                  Admin Demo
+                </button>
+              </div>
+
+              <!-- Live Database Status -->
+              <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                <span id="db-status-pill" class="preview-status" style="padding: 0.3rem 0.8rem; background: var(--surface-card); border-radius: var(--radius-full); border: 1px solid var(--border);">
+                  <span class="pulse-dot"></span> Checking Database...
+                </span>
+              </div>
+
+              <!-- Stats Highlights -->
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <div class="stat-value">99.98%</div>
+                  <div class="stat-label">Cloud Availability</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-value">500+</div>
+                  <div class="stat-label">Corporate Personnel</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-value">100%</div>
+                  <div class="stat-label">Role Isolation</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hero Graphic / Portal Gateway Card -->
+            <div class="hero-graphic">
+              <div class="preview-card">
+                <div class="preview-header">
+                  <div>
+                    <h3 style="font-size: 1.15rem; font-weight: 700;">Role Gateway</h3>
+                    <p style="font-size: 0.82rem; color: var(--text-muted);">Select your workspace to enter</p>
+                  </div>
+                  <div class="preview-status">
+                    <span class="pulse-dot"></span> System Online
+                  </div>
+                </div>
+
+                <div class="quick-portal-box">
+                  <button type="button" class="portal-option-btn" id="gateway-emp-btn" onclick="document.getElementById('hero-emp-demo-btn').click()">
+                    <div class="portal-option-info">
+                      <span class="badge badge-employee" style="margin-bottom: 0.3rem;">Employee Portal</span>
+                      <h4>Staff & Associate View</h4>
+                      <p>Authenticate and inspect the comprehensive executive directory of all Company Administrators.</p>
+                    </div>
+                    <span style="font-size: 1.3rem;">→</span>
+                  </button>
+
+                  <button type="button" class="portal-option-btn" id="gateway-adm-btn" onclick="document.getElementById('hero-adm-demo-btn').click()">
+                    <div class="portal-option-info">
+                      <span class="badge badge-admin" style="margin-bottom: 0.3rem;">Admin Dashboard</span>
+                      <h4>Administrator View</h4>
+                      <p>Authenticate and inspect all personnel records (both employees and administrators) with management controls.</p>
+                    </div>
+                    <span style="font-size: 1.3rem;">→</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Company Features / About Section -->
+      <section class="section" id="company-solutions">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-subtitle">Engineered for Scalability</div>
+            <h2 class="section-title">Built for Modern Corporate Governance</h2>
+            <p class="section-lead">NexPulse provides enterprise-grade infrastructure to streamline cross-departmental collaboration, security, and administrative oversight.</p>
+          </div>
+
+          <div class="features-grid">
+            <article class="feature-card">
+              <div class="feature-icon-wrapper">🛡️</div>
+              <h3>Role-Based Access Control</h3>
+              <p>Strict access boundaries distinguish employees from executives. Every account is validated with cryptographic authentication.</p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon-wrapper">⚡</div>
+              <h3>Real-Time Cloud Database</h3>
+              <p>Powered by Google Firebase Cloud Firestore for instant synchronization, low latency, and automatic offline caching fallback.</p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon-wrapper">👥</div>
+              <h3>Transparent Leadership Directory</h3>
+              <p>Employees can immediately reach department heads, technology officers, and human resources leadership directly.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ======================================================================
+         VIEW 2: EMPLOYEE DASHBOARD
+         (Condition: Emp login -> Authenticate and view ALL Admin details)
+         ====================================================================== -->
+    <div id="employee-view" class="dashboard-view" style="display: none;">
+      <div class="container">
+        <!-- Banner -->
+        <div class="dashboard-banner">
+          <div class="dashboard-user-meta">
+            <div class="dashboard-avatar" id="emp-profile-avatar">AR</div>
+            <div class="dashboard-welcome">
+              <span class="badge badge-employee" style="margin-bottom: 0.4rem;">Employee Verified</span>
+              <h1>Welcome, <span id="emp-profile-name">Alex Rivera</span></h1>
+              <p id="emp-profile-dept">Engineering • Senior Cloud Engineer</p>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
+                Employee Badge: <strong id="emp-profile-id" style="color: var(--secondary);">EMP-2041</strong>
+              </p>
+            </div>
+          </div>
+
+          <div class="dashboard-header-actions">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="window.print()">
+              🖨️ Print Directory
+            </button>
+            <button type="button" class="btn btn-danger btn-sm logout-trigger">
+              Sign Out
+            </button>
+          </div>
+        </div>
+
+        <!-- Role Requirement Callout -->
+        <div class="condition-alert">
+          <span style="font-size: 1.4rem;">ℹ️</span>
+          <div>
+            <strong>Requirement Satisfied:</strong> You are authenticated as an <strong>Employee</strong>. Per company policy, your portal provides full access to view <strong>All Administrator Details</strong> below, including official emails, contact phones, office towers, and assigned responsibilities.
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="directory-controls-bar">
+          <div>
+            <h2 style="font-size: 1.5rem; font-weight: 700;">Company Administrator Directory</h2>
+            <p id="employee-admin-count" style="font-size: 0.88rem; color: var(--text-muted);">
+              Loading administrator records...
+            </p>
+          </div>
+
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="emp-admin-search" class="search-input" placeholder="Search administrators by name, department, or office..." />
+          </div>
+        </div>
+
+        <!-- Grid of Admins -->
+        <div id="employee-admins-grid" class="personnel-grid">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         VIEW 3: ADMIN DASHBOARD
+         (Condition: Admin login -> Authenticate and view ALL details)
+         ====================================================================== -->
+    <div id="admin-view" class="dashboard-view" style="display: none;">
+      <div class="container">
+        <!-- Banner -->
+        <div class="dashboard-banner">
+          <div class="dashboard-user-meta">
+            <div class="dashboard-avatar" style="background: var(--admin-badge);" id="admin-profile-avatar">NA</div>
+            <div class="dashboard-welcome">
+              <span class="badge badge-admin" style="margin-bottom: 0.4rem;">Company Administrator</span>
+              <h1>Welcome, <span id="admin-profile-name">NexPulse Administrator</span></h1>
+              <p id="admin-profile-dept">System Administrator • Executive Office</p>
+            </div>
+          </div>
+
+          <div class="dashboard-header-actions">
+            <button type="button" class="btn btn-primary btn-sm" id="admin-add-personnel-btn">
+              + Add New Personnel
+            </button>
+            <button type="button" class="btn btn-danger btn-sm logout-trigger">
+              Sign Out
+            </button>
+          </div>
+        </div>
+
+        <!-- Role Requirement Callout -->
+        <div class="condition-alert" style="border-left-color: #ec4899; background: rgba(236, 72, 153, 0.08);">
+          <span style="font-size: 1.4rem;">⚡</span>
+          <div>
+            <strong>Requirement Satisfied:</strong> You are authenticated as an <strong>Administrator</strong>. You have full executive permissions to <strong>View All Details</strong> across the company (Employees and Administrators), perform real-time searches, filter by department or role, and manage personnel records in the database.
+          </div>
+        </div>
+
+        <!-- KPI Metrics Grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon primary">👥</div>
+            <div class="kpi-meta">
+              <h3 id="kpi-total">0</h3>
+              <p>Total Personnel</p>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon cyan">💼</div>
+            <div class="kpi-meta">
+              <h3 id="kpi-employees">0</h3>
+              <p>Active Employees</p>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon pink">🛡️</div>
+            <div class="kpi-meta">
+              <h3 id="kpi-admins">0</h3>
+              <p>Administrators</p>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon emerald">🏢</div>
+            <div class="kpi-meta">
+              <h3 id="kpi-depts">0</h3>
+              <p>Departments</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="directory-controls-bar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="admin-search-input" class="search-input" placeholder="Search across all records by name, email, phone, or designation..." />
+          </div>
+
+          <div class="filter-actions">
+            <!-- Role Filter -->
+            <select id="admin-role-filter" class="filter-select" aria-label="Filter by Role">
+              <option value="all">All Roles</option>
+              <option value="employee">Employees Only</option>
+              <option value="admin">Administrators Only</option>
+            </select>
+
+            <!-- Department Filter -->
+            <select id="admin-dept-filter" class="filter-select" aria-label="Filter by Department">
+              <option value="all">All Departments</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Engineering & Leadership">Engineering & Leadership</option>
+              <option value="Human Resources">Human Resources</option>
+              <option value="Operations & Strategy">Operations & Strategy</option>
+              <option value="Product & Design">Product & Design</option>
+              <option value="Finance">Finance</option>
+            </select>
+
+            <!-- View Toggle -->
+            <div style="display: flex; gap: 0.2rem; background: var(--surface-card); padding: 0.2rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+              <button type="button" class="btn btn-outline btn-sm active" id="view-table-btn" title="Table View">📑 Table</button>
+              <button type="button" class="btn btn-outline btn-sm" id="view-cards-btn" title="Card View">🗂️ Cards</button>
+            </div>
+
+            <span id="admin-results-count" class="badge" style="background: var(--surface-card); border: 1px solid var(--border); color: var(--text-secondary);">
+              Loading...
+            </span>
+          </div>
+        </div>
+
+        <!-- Detailed Table View -->
+        <div id="admin-table-container" class="table-responsive">
+          <table class="data-table" aria-label="Complete Company Directory">
+            <thead>
+              <tr>
+                <th>Personnel</th>
+                <th>Role</th>
+                <th>Department</th>
+                <th>Work Email</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-table-body">
+              <!-- Rendered dynamically by app.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Detailed Card View (Alternative layout) -->
+        <div id="admin-cards-container" class="personnel-grid" style="display: none; margin-top: 1rem;">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================================================
+       MODAL 1: AUTHENTICATION (Sign In & Registration)
+       ======================================================================== -->
+  <div class="modal-overlay" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" id="auth-modal-close-btn" aria-label="Close modal">✕</button>
+
+      <div class="modal-tabs">
+        <button type="button" class="tab-btn active" id="tab-login-btn">Sign In</button>
+        <button type="button" class="tab-btn" id="tab-register-btn">Register New Account</button>
+      </div>
+
+      <!-- ================= SIGN IN FORM ================= -->
+      <form id="login-form" autocomplete="on">
+        <h2 id="auth-modal-title" style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.4rem;">Sign in to NexPulse</h2>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem;">Enter your work credentials to access your portal.</p>
+
+        <div class="form-group">
+          <label class="form-label" for="login-email">Work Email Address</label>
+          <input type="email" id="login-email" class="form-control" placeholder="name@nexpulse.com" autocomplete="username" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="login-password" class="form-control" placeholder="••••••••" autocomplete="current-password" required />
+            <button type="button" class="password-toggle-btn" data-target="login-password" title="Show/Hide password">👁</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" id="login-submit-btn">
+          Sign In to Portal
+        </button>
+
+        <!-- Quick 1-Click Demo Testing Box -->
+        <div class="demo-login-box">
+          <div class="demo-title">⚡ 1-Click Instant Test Credentials</div>
+          <div class="demo-buttons-row">
+            <button type="button" class="btn btn-secondary btn-sm" id="quick-employee-demo-btn" title="Sign in as test employee">
+              👔 Employee Demo
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" id="quick-admin-demo-btn" title="Sign in as test admin">
+              🛡️ Admin Demo
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- ================= REGISTRATION FORM ================= -->
+      <form id="register-form" style="display: none;" autocomplete="on">
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.4rem;">Create Account</h2>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem;">Register a new Employee or Administrator profile.</p>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-name">Full Name</label>
+          <input type="text" id="reg-name" class="form-control" placeholder="Jane Doe" required autocomplete="name" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-email">Work Email</label>
+          <input type="email" id="reg-email" class="form-control" placeholder="jane.doe@nexpulse.com" required autocomplete="username" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="reg-password" class="form-control" placeholder="Min. 6 characters" minlength="6" required autocomplete="new-password" />
+            <button type="button" class="password-toggle-btn" data-target="reg-password" title="Show/Hide password">👁</button>
+          </div>
+        </div>
+
+        <!-- Role Selector -->
+        <div class="form-group">
+          <label class="form-label">Account Role</label>
+          <div class="role-selector">
+            <label class="role-radio-label">
+              <input type="radio" name="reg-role" value="employee" checked />
+              <div class="role-box">
+                <span class="role-title">Employee</span>
+                <span class="role-desc">View admin details</span>
+              </div>
+            </label>
+
+            <label class="role-radio-label">
+              <input type="radio" name="reg-role" value="admin" />
+              <div class="role-box">
+                <span class="role-title">Administrator</span>
+                <span class="role-desc">View all details</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-department">Department</label>
+          <select id="reg-department" class="form-control">
+            <option value="Engineering">Engineering</option>
+            <option value="Product & Design">Product & Design</option>
+            <option value="Human Resources">Human Resources</option>
+            <option value="Finance">Finance</option>
+            <option value="Operations & Strategy">Operations & Strategy</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-designation">Designation / Title</label>
+          <input type="text" id="reg-designation" class="form-control" placeholder="e.g. Software Engineer / Team Lead" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-phone">Contact Phone</label>
+          <input type="tel" id="reg-phone" class="form-control" placeholder="+1 (555) 000-0000" inputmode="tel" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" id="reg-submit-btn">
+          Create Account & Save
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 2: ADMIN - ADD PERSONNEL RECORD
+       ======================================================================== -->
+  <div class="modal-overlay" id="add-personnel-modal" role="dialog" aria-modal="true" aria-labelledby="add-modal-title">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" id="add-personnel-close-btn" aria-label="Close modal">✕</button>
+
+      <h2 id="add-modal-title" style="font-size: 1.3rem; font-weight: 700; margin-bottom: 0.4rem;">Add Personnel Record</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">Add a new employee or administrator directly to the database.</p>
+
+      <form id="add-personnel-form">
+        <div class="form-group">
+          <label class="form-label" for="add-name">Full Name</label>
+          <input type="text" id="add-name" class="form-control" placeholder="Full name" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="add-email">Work Email</label>
+          <input type="email" id="add-email" class="form-control" placeholder="email@nexpulse.com" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="add-role">Role</label>
+          <select id="add-role" class="form-control">
+            <option value="employee">Employee</option>
+            <option value="admin">Administrator</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="add-department">Department</label>
+          <select id="add-department" class="form-control">
+            <option value="Engineering">Engineering</option>
+            <option value="Product & Design">Product & Design</option>
+            <option value="Human Resources">Human Resources</option>
+            <option value="Finance">Finance</option>
+            <option value="Operations & Strategy">Operations & Strategy</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="add-designation">Designation</label>
+          <input type="text" id="add-designation" class="form-control" placeholder="e.g. Security Specialist" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="add-phone">Phone Number</label>
+          <input type="tel" id="add-phone" class="form-control" placeholder="+1 (555) 000-0000" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+          Save to Database
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       Toast Notification Center
+       ======================================================================== -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- ========================================================================
+       Footer
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <strong>NexPulse Enterprise Portal</strong> — People Operations & Governance System.
+        </div>
+        <div class="footer-links">
+          <a href="index.html">MCA Portfolio</a>
+          <a href="#home">Back to Top</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic Module -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>

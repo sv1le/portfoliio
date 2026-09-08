@@ -15,7 +15,20 @@
       --accent: #ff6b6b;
       --shadow: 0 20px 50px rgba(0,0,0,0.35);
     }
+    .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+}
 
+.pill {
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.14);
+    color: var(--secondary);
+    font-size: 0.85rem;
+}
     body.light {
       --bg: #f4f7ff;
       --surface: rgba(255,255,255,0.75);
@@ -309,12 +322,15 @@
       <nav>
         <div class="brand">MCA Portfolio</div>
         <div class="nav-links">
-          <a href="#about">About</a>
-          <a href="#labs">Lab Work</a>
-          <a href="#experience">Experience</a>
-          <a href="#projects">Projects</a>
-          <a href="#contact">Contact</a>
-        </div>
+    <a href="#about">About</a>
+    <a href="#labs">Lab Work</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+          <a href="company.html">Company System</a>
+          <a href="contacts.html">Contact Manager</a>
+          <a href="employee.html">Employee Registry</a>
+    <a href="#contact">Contact</a>
+</div>
         <button class="theme-btn" onclick="toggleTheme()">☀︎ / ☾</button>
       </nav>
     </div>
@@ -463,6 +479,68 @@
           </ul>
           <a href="quiz.html" target="_blank" class="btn btn-outline" style="margin-top: 1rem;">Open Quiz</a>
         </div>
+        <div class="card">
+          <h3>Scientific Calculator</h3>
+          <p>Created a calculator with both basic arithmetic and scientific functions such as trigonometry, logarithms, square root, and power operations.</p>
+          <ul class="project-list">
+            <li>Basic operations</li>
+            <li>Scientific functions</li>
+            <li>Responsive UI</li>
+          </ul>
+          <a href="calculator.html" target="_blank" class="btn btn-outline" style="margin-top: 1rem;">Open Calculator</a>
+        </div>
+        <div class="card">
+    <h3>NexPulse Enterprise System</h3>
+    <p>A corporate people operations system with role-based access control and database integration.</p>
+    <ul class="project-list">
+        <li>Role-based authentication (Employee & Admin)</li>
+        <li>Employee Portal: view all Administrator details</li>
+        <li>Admin Dashboard: view & manage all company records</li>
+        <li>Real-time database integration with Google Firebase</li>
+    </ul>
+    <div class="tech-stack" style="margin: 1rem 0;">
+        <span class="pill">HTML5</span>
+        <span class="pill">CSS3</span>
+        <span class="pill">JavaScript</span>
+        <span class="pill">Firebase Auth</span>
+        <span class="pill">Cloud Firestore</span>
+    </div>
+          <a href="company.html" class="btn btn-outline" style="margin-top: 1rem;">Open Company Portal</a>
+</div>
+        <div class="card">
+    <h3>PulseContacts Management App</h3>
+    <p>A full-featured contact management application with complete CRUD operations and real-time database support.</p>
+    <ul class="project-list">
+        <li>Add, view, edit, and delete contacts (CRUD)</li>
+        <li>Live search, categorization, and favorite stars</li>
+        <li>Dual view modes: Card Grid and Compact Table</li>
+        <li>Export to CSV & JSON, powered by Cloud Firestore</li>
+    </ul>
+    <div class="tech-stack" style="margin: 1rem 0;">
+        <span class="pill">HTML5</span>
+        <span class="pill">CSS3</span>
+        <span class="pill">JavaScript</span>
+        <span class="pill">Cloud Firestore</span>
+    </div>
+          <a href="contacts.html" class="btn btn-outline" style="margin-top: 1rem;">Open Contact Manager</a>
+</div>
+        <div class="card">
+    <h3>Employee Form & Database Table</h3>
+    <p>A comprehensive employee registration system with real-time Firestore database integration and management table.</p>
+    <ul class="project-list">
+        <li>Form design to enter detailed employee records</li>
+        <li>Real-time database storage in Firebase Cloud Firestore</li>
+        <li>Interactive data table with search and department filtering</li>
+        <li>Quick fill testing, CSV export, and record editing</li>
+    </ul>
+    <div class="tech-stack" style="margin: 1rem 0;">
+        <span class="pill">HTML5</span>
+        <span class="pill">CSS3</span>
+        <span class="pill">JavaScript</span>
+        <span class="pill">Cloud Firestore</span>
+    </div>
+          <a href="employee.html" class="btn btn-outline" style="margin-top: 1rem;">Open Employee Registry</a>
+</div>
       </div>
     </section>
 

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scientific Calculator</title>
+  <style>
+  /* ─── Reset & Base ─── */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #ffffff;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 1.2rem;
+  }
+
+  .calculator {
+    width: min(420px, 100%);
+    background: #ffffff;
+    border: 2px solid #222;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+
+  /* ─── Top Bar ─── */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .brand {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #222;
+  }
+
+  .back-link {
+    color: #222;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 1.5px solid #222;
+    padding: 0.25rem 0.75rem;
+    border-radius: 30px;
+    transition: background 0.2s;
+  }
+
+  .back-link:hover {
+    background: #222;
+    color: #fff;
+  }
+
+  /* ─── Display ─── */
+  .display {
+    border: 2px solid #222;
+    border-radius: 14px;
+    padding: 1rem 1rem 0.8rem;
+    margin-bottom: 1.5rem;
+    background: #fafafa;
+  }
+
+  .expression {
+    min-height: 28px;
+    font-size: 0.95rem;
+    color: #666;
+    text-align: right;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+    margin-bottom: 0.3rem;
+    font-weight: 400;
+  }
+
+  .result {
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+    color: #000;
+  }
+
+  /* ─── Buttons Grid ─── */
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.7rem;
+  }
+
+  button {
+    border: 2px solid #222;
+    border-radius: 12px;
+    padding: 1rem 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: #ffffff;
+    color: #222;
+    transition: none;
+    box-shadow: none;
+  }
+
+  button:hover {
+    background: #ffffff;
+    color: #222;
+    transform: none;
+  }
+
+  button:active {
+    transform: none;
+  }
+
+  /* ─── Operator Buttons ─── */
+  .operator {
+    background: #f0f0f0;
+  }
+
+  .operator:hover {
+    background: #f0f0f0;
+    color: #111;
+  }
+
+  /* ─── Function Buttons (AC, %, ±) ─── */
+  .function {
+    background: #e8e8e8;
+  }
+
+  .function:hover {
+    background: #e8e8e8;
+    color: #111;
+  }
+
+  /* ─── Equal Button ─── */
+  .equal {
+    background: #222;
+    color: #fff;
+  }
+
+  .equal:hover {
+    background: #222;
+    color: #fff;
+  }
+
+  /* ─── Danger / Clear ─── */
+  .danger {
+    background: #fff0f0;
+    border-color: #cc0000;
+    color: #cc0000;
+  }
+
+  .danger:hover {
+    background: #fff0f0;
+    color: #cc0000;
+    border-color: #cc0000;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 500px) {
+    .calculator {
+      padding: 1rem;
+    }
+    .buttons {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.6rem;
+    }
+    .topbar {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    button {
+      padding: 0.9rem 0.3rem;
+      font-size: 0.95rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="topbar">
+      <div class="brand">Scientific Calculator</div>
+      <a class="back-link" href="index.html">← Portfolio</a>
+    </div>
+
+    <div class="display">
+      <div class="expression" id="expression">0</div>
+      <div class="result" id="result">0</div>
+    </div>
+
+    <div class="buttons">
+      <button class="function" data-value="C">C</button>
+      <button class="function" data-value="DEL">DEL</button>
+      <button class="function" data-value="(">(</button>
+      <button class="function" data-value=")">)</button>
+      <button class="operator" data-value="÷">÷</button>
+
+      <button class="function" data-value="sin(">sin</button>
+      <button class="function" data-value="cos(">cos</button>
+      <button class="function" data-value="tan(">tan</button>
+      <button class="function" data-value="log(">log</button>
+      <button class="operator" data-value="×">×</button>
+
+      <button class="function" data-value="ln(">ln</button>
+      <button class="function" data-value="√(">√</button>
+      <button class="function" data-value="^2">x²</button>
+      <button class="function" data-value="^">xʸ</button>
+      <button class="operator" data-value="-">−</button>
+
+      <button class="function" data-value="π">π</button>
+      <button class="function" data-value="e">e</button>
+      <button class="function" data-value="%">%</button>
+      <button class="function" data-value="!">n!</button>
+      <button class="operator" data-value="+">+</button>
+
+      <button data-value="7">7</button>
+      <button data-value="8">8</button>
+      <button data-value="9">9</button>
+      <button class="danger" data-value="AC">AC</button>
+      <button class="equal" data-value="=">=</button>
+
+      <button data-value="4">4</button>
+      <button data-value="5">5</button>
+      <button data-value="6">6</button>
+      <button data-value=".">.</button>
+      <button class="function" data-value="±">±</button>
+
+      <button data-value="1">1</button>
+      <button data-value="2">2</button>
+      <button data-value="3">3</button>
+      <button data-value="0" style="grid-column: span 2;">0</button>
+    </div>
+
+  </div>
+
+  <script>
+    const expressionEl = document.getElementById('expression');
+    const resultEl = document.getElementById('result');
+    let expression = '';
+
+    function factorial(value) {
+      const n = Number(value);
+      if (!Number.isInteger(n) || n < 0) return NaN;
+      if (n < 2) return 1;
+      let total = 1;
+      for (let i = 2; i <= n; i++) {
+        total *= i;
+      }
+      return total;
+    }
+
+    function formatResult(value) {
+      if (value === 'Error' || value === undefined || !Number.isFinite(value)) {
+        return 'Error';
+      }
+
+      if (Math.abs(value) >= 1e10 || (Math.abs(value) > 0 && Math.abs(value) < 1e-10)) {
+        return value.toExponential(6);
+      }
+
+      return Number(value.toFixed(10)).toString();
+    }
+
+    function evaluateExpression(expr) {
+      if (!expr.trim()) return 0;
+
+      let sanitized = expr
+        .replace(/×/g, '*')
+        .replace(/÷/g, '/')
+        .replace(/π/g, 'PI')
+        .replace(/\be\b/g, 'E')
+        .replace(/\^/g, '**')
+        .replace(/%/g, '/100')
+        .replace(/(\d+(?:\.\d+)?)!/g, 'fact($1)');
+
+      sanitized = sanitized.replace(/sin\(/g, 'sin(');
+      sanitized = sanitized.replace(/cos\(/g, 'cos(');
+      sanitized = sanitized.replace(/tan\(/g, 'tan(');
+      sanitized = sanitized.replace(/log\(/g, 'log(');
+      sanitized = sanitized.replace(/ln\(/g, 'ln(');
+      sanitized = sanitized.replace(/√\(/g, 'sqrt(');
+
+      try {
+        const fn = new Function(
+          'sin', 'cos', 'tan', 'log', 'ln', 'sqrt', 'fact', 'PI', 'E',
+          `return (${sanitized});`
+        );
+
+        const result = fn(
+          (x) => Math.sin((x * Math.PI) / 180),
+          (x) => Math.cos((x * Math.PI) / 180),
+          (x) => Math.tan((x * Math.PI) / 180),
+          (x) => Math.log10(x),
+          (x) => Math.log(x),
+          (x) => Math.sqrt(x),
+          factorial,
+          Math.PI,
+          Math.E
+        );
+
+        return Number.isFinite(result) ? result : 'Error';
+      } catch {
+        return 'Error';
+      }
+    }
+
+    function updateDisplay() {
+      const currentExpr = expression || '0';
+      expressionEl.textContent = currentExpr;
+
+      if (!expression) {
+        resultEl.textContent = '0';
+        return;
+      }
+
+      const result = evaluateExpression(expression);
+      resultEl.textContent = result === 'Error' ? 'Error' : formatResult(result);
+    }
+
+    function appendValue(value) {
+      if (value === 'AC' || value === 'C') {
+        expression = '';
+        updateDisplay();
+        return;
+      }
+
+      if (value === 'DEL') {
+        expression = expression.slice(0, -1);
+        updateDisplay();
+        return;
+      }
+
+      if (value === '=') {
+        const finalValue = evaluateExpression(expression);
+        expression = finalValue === 'Error' ? 'Error' : formatResult(finalValue);
+        updateDisplay();
+        return;
+      }
+
+      if (value === '±') {
+        if (!expression) {
+          expression = '-';
+        } else {
+          expression = `(-(${expression}))`;
+        }
+        updateDisplay();
+        return;
+      }
+
+      if (value === 'π' || value === 'e') {
+        expression += value;
+        updateDisplay();
+        return;
+      }
+      if (value === '^2') {
+        expression += '^2';
+        updateDisplay();
+        return;
+      }
+
+      expression += value;
+      updateDisplay();
+    }
+
+    document.querySelectorAll('button').forEach((button) => {
+      button.addEventListener('click', () => {
+        appendValue(button.dataset.value);
+      });
+    });
+
+    updateDisplay();
+  </script>
+</body>
+</html>

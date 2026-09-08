@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Employee Registration & Firebase Database System</title>
+  <meta name="description" content="Form design to enter employee details and store them into a real-time table in Firebase Cloud Firestore." />
+
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="employee.css" />
+</head>
+<body>
+
+  <!-- ========================================================================
+       Top Navigation Header
+       ======================================================================== -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar" aria-label="Employee Portal Navigation">
+        <a href="employee.html" class="brand-logo" id="brand-link">
+          <div class="logo-icon" aria-hidden="true">🏢</div>
+          <div class="brand-text">Staff<span>Hub</span></div>
+        </a>
+
+        <!-- Firebase Cloud Status Indicator -->
+        <div id="db-status-badge" class="db-status-pill">
+          <span class="pulse-dot"></span>
+          Connecting to Firebase Database...
+        </div>
+
+        <div class="nav-actions">
+          <button type="button" class="btn btn-outline btn-sm" id="theme-toggle-btn" title="Toggle Theme">
+            🌓 Mode
+          </button>
+          <a href="company.html" class="btn btn-outline btn-sm" title="Company Portal">
+            Company Portal
+          </a>
+          <a href="index.html" class="btn btn-outline btn-sm" title="MCA Lab Portfolio">
+            ← Portfolio
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       Main Content Area
+       ======================================================================== -->
+  <main class="container page-hero">
+
+    <!-- Header Banner & Action Shortcuts -->
+    <section class="hero-header">
+      <div class="hero-titles">
+        <h1>Employee <span style="background: linear-gradient(135deg, #6366f1, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Registry & Database</span></h1>
+        <p>Enter comprehensive employee details into the form below to store them directly into the Firebase database table.</p>
+      </div>
+
+      <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-csv" title="Export database records to CSV">
+          📥 Export CSV
+        </button>
+        <button type="button" class="btn btn-outline btn-sm" id="btn-reset-sample" title="Restore sample employee records">
+          🔄 Reset Sample
+        </button>
+      </div>
+    </section>
+
+    <!-- Summary KPI Cards -->
+    <section class="kpi-row" aria-label="Employee Statistics">
+      <div class="kpi-card">
+        <div class="kpi-icon primary">👥</div>
+        <div class="kpi-info">
+          <h3 id="kpi-total">0</h3>
+          <p>Total Employees</p>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon cyan">💼</div>
+        <div class="kpi-info">
+          <h3 id="kpi-fulltime">0</h3>
+          <p>Full-Time Staff</p>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon emerald">🏢</div>
+        <div class="kpi-info">
+          <h3 id="kpi-depts">0</h3>
+          <p>Departments</p>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon amber">💵</div>
+        <div class="kpi-info">
+          <h3 id="kpi-payroll">₹0</h3>
+          <p>Monthly Payroll</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Split Layout: Entry Form (Left) & Database Table (Right) -->
+    <div class="app-grid-layout">
+
+      <!-- ====================================================================
+           LEFT COLUMN: EMPLOYEE ENTRY FORM
+           ==================================================================== -->
+      <section class="form-panel" aria-labelledby="form-heading">
+        <div class="form-header">
+          <div>
+            <h2 id="form-heading">Enter Employee Details</h2>
+            <p>Fill in the form to register a new staff member.</p>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-quick-fill" title="Populate with test data for rapid testing">
+            ⚡ Quick Fill
+          </button>
+        </div>
+
+        <form id="employee-entry-form" autocomplete="on">
+          <!-- Row 1: ID & Full Name -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="emp-id">Employee ID *</label>
+              <input type="text" id="emp-id" class="form-control" placeholder="EMP-1006" required data-manual-edit="false" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="emp-name">Full Name *</label>
+              <input type="text" id="emp-name" class="form-control" placeholder="e.g. Rahul Sharma" required autocomplete="name" />
+            </div>
+          </div>
+
+          <!-- Row 2: Email & Phone -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="emp-email">Work Email *</label>
+              <input type="email" id="emp-email" class="form-control" placeholder="rahul@company.org" required autocomplete="email" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="emp-phone">Contact Phone</label>
+              <input type="tel" id="emp-phone" class="form-control" placeholder="+91 98765 00000" autocomplete="tel" />
+            </div>
+          </div>
+
+          <!-- Row 3: Department & Designation -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="emp-dept">Department *</label>
+              <select id="emp-dept" class="form-control">
+                <option value="Engineering">Engineering</option>
+                <option value="Product & Design">Product & Design</option>
+                <option value="Human Resources">Human Resources</option>
+                <option value="Finance">Finance</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Operations">Operations</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="emp-designation">Designation / Role</label>
+              <input type="text" id="emp-designation" class="form-control" placeholder="e.g. Software Engineer" />
+            </div>
+          </div>
+
+          <!-- Row 4: Employment Type & Date of Joining -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="emp-type">Employment Type</label>
+              <select id="emp-type" class="form-control">
+                <option value="Full-Time">Full-Time</option>
+                <option value="Hybrid">Hybrid</option>
+                <option value="Remote">Remote</option>
+                <option value="Contract">Contract</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="emp-joining">Date of Joining</label>
+              <input type="date" id="emp-joining" class="form-control" />
+            </div>
+          </div>
+
+          <!-- Row 5: Salary & Office Location -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="emp-salary">Monthly Salary (₹)</label>
+              <input type="number" id="emp-salary" class="form-control" placeholder="75000" min="0" step="1000" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="emp-office">Office / Campus</label>
+              <input type="text" id="emp-office" class="form-control" placeholder="HQ - Tech Bay" />
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div class="form-group">
+            <label class="form-label" for="emp-notes">Work Notes & Specialization</label>
+            <textarea id="emp-notes" class="form-control" placeholder="Add technical skills, team assignment, or emergency contact..."></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" id="btn-form-reset" style="flex: 1;">
+              Reset Form
+            </button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-employee" style="flex: 2;">
+              💾 Save to Database
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ====================================================================
+           RIGHT COLUMN: REAL-TIME DATABASE TABLE
+           ==================================================================== -->
+      <section class="table-panel" aria-labelledby="table-heading">
+        <div class="table-controls-bar">
+          <div>
+            <h2 id="table-heading" style="font-size: 1.35rem; font-weight: 700;">Employee Database Records</h2>
+            <p id="records-count-badge" style="font-size: 0.82rem; color: var(--text-muted);">
+              Loading employee records...
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+            <!-- Search Bar -->
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input 
+                type="text" 
+                id="emp-search-input" 
+                class="search-input" 
+                placeholder="Search by name, ID, email, or designation..." 
+                aria-label="Search Employees"
+              />
+            </div>
+
+            <!-- Department Filter -->
+            <select id="emp-dept-filter" class="filter-select" aria-label="Filter by Department">
+              <option value="all">All Departments</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Product & Design">Product & Design</option>
+              <option value="Human Resources">Human Resources</option>
+              <option value="Finance">Finance</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Operations">Operations</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Real-Time Data Table -->
+        <div class="table-wrapper">
+          <table class="data-table" aria-label="Employee Records Table">
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Department & Role</th>
+                <th>Contact</th>
+                <th>Type</th>
+                <th>Joining Date</th>
+                <th>Salary</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="employee-table-body">
+              <!-- Rendered dynamically by employee-app.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- ========================================================================
+       MODAL 1: VIEW EMPLOYEE DETAILS MODAL
+       ======================================================================== -->
+  <div class="modal-overlay" id="employee-view-modal" role="dialog" aria-modal="true" aria-labelledby="view-modal-name">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" id="btn-close-view-modal" aria-label="Close modal">✕</button>
+
+      <div style="display: flex; align-items: center; gap: 1.2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem;">
+        <div class="user-avatar-sm" style="width: 60px; height: 60px; font-size: 1.4rem;" id="view-modal-avatar">AR</div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <h2 id="view-modal-name" style="font-size: 1.4rem; font-weight: 700;">Alex Rivera</h2>
+            <span id="view-modal-id-badge" class="badge badge-dept">EMP-1001</span>
+          </div>
+          <p id="view-modal-dept-title" style="color: var(--text-secondary); font-size: 0.9rem;">Senior Cloud Engineer • Engineering</p>
+        </div>
+      </div>
+
+      <div style="display: grid; gap: 0.8rem; margin-bottom: 1.5rem; font-size: 0.9rem;">
+        <div style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: var(--surface); border-radius: var(--radius-sm);">
+          <span style="color: var(--text-muted);">Work Email:</span>
+          <span id="view-modal-email" style="font-weight: 600;">alex@company.org</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: var(--surface); border-radius: var(--radius-sm);">
+          <span style="color: var(--text-muted);">Contact Phone:</span>
+          <span id="view-modal-phone" style="font-weight: 600;">+91 98765 01001</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: var(--surface); border-radius: var(--radius-sm);">
+          <span style="color: var(--text-muted);">Employment Type:</span>
+          <span id="view-modal-type" style="font-weight: 600;">Full-Time</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: var(--surface); border-radius: var(--radius-sm);">
+          <span style="color: var(--text-muted);">Date of Joining:</span>
+          <span id="view-modal-joining" style="font-weight: 600;">2023-01-15</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: var(--surface); border-radius: var(--radius-sm);">
+          <span style="color: var(--text-muted);">Monthly Salary:</span>
+          <span id="view-modal-salary" style="font-weight: 600; color: var(--success);">₹85,000</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0.6rem 0.8rem; background: var(--surface); border-radius: var(--radius-sm);">
+          <span style="color: var(--text-muted);">Office Location:</span>
+          <span id="view-modal-office" style="font-weight: 600;">HQ - Tech Tower 4B</span>
+        </div>
+        <div style="padding: 0.8rem; background: var(--surface); border-radius: var(--radius-sm);">
+          <span style="display: block; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.3rem;">Work Notes:</span>
+          <p id="view-modal-notes" style="color: var(--text-secondary); line-height: 1.5; margin: 0;">Lead engineer for cloud infrastructure.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 2: EDIT EMPLOYEE MODAL
+       ======================================================================== -->
+  <div class="modal-overlay" id="employee-edit-modal" role="dialog" aria-modal="true" aria-labelledby="edit-modal-heading">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" id="btn-close-edit-modal" aria-label="Close modal">✕</button>
+
+      <div style="margin-bottom: 1.25rem;">
+        <h2 id="edit-modal-heading" style="font-size: 1.35rem; font-weight: 700;">Edit Employee Record</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Update employee details in the database.</p>
+      </div>
+
+      <form id="employee-edit-form">
+        <!-- Hidden/Readonly ID -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="edit-emp-id">Employee ID</label>
+            <input type="text" id="edit-emp-id" class="form-control" readonly style="opacity: 0.7; cursor: not-allowed;" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="edit-emp-name">Full Name *</label>
+            <input type="text" id="edit-emp-name" class="form-control" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="edit-emp-email">Work Email *</label>
+            <input type="email" id="edit-emp-email" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="edit-emp-phone">Phone</label>
+            <input type="tel" id="edit-emp-phone" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="edit-emp-dept">Department</label>
+            <select id="edit-emp-dept" class="form-control">
+              <option value="Engineering">Engineering</option>
+              <option value="Product & Design">Product & Design</option>
+              <option value="Human Resources">Human Resources</option>
+              <option value="Finance">Finance</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Operations">Operations</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="edit-emp-designation">Designation</label>
+            <input type="text" id="edit-emp-designation" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="edit-emp-type">Employment Type</label>
+            <select id="edit-emp-type" class="form-control">
+              <option value="Full-Time">Full-Time</option>
+              <option value="Hybrid">Hybrid</option>
+              <option value="Remote">Remote</option>
+              <option value="Contract">Contract</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="edit-emp-joining">Joining Date</label>
+            <input type="date" id="edit-emp-joining" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="edit-emp-salary">Monthly Salary (₹)</label>
+            <input type="number" id="edit-emp-salary" class="form-control" min="0" step="1000" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="edit-emp-office">Office Location</label>
+            <input type="text" id="edit-emp-office" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="edit-emp-notes">Work Notes</label>
+          <textarea id="edit-emp-notes" class="form-control"></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+          <button type="button" class="btn btn-outline" id="btn-cancel-edit">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Database</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Center -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- ========================================================================
+       Footer
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <strong>StaffHub</strong> — Employee Form Design & Firebase Cloud Database System.
+        </div>
+        <div style="display: flex; gap: 1.5rem;">
+          <a href="index.html">← Back to Portfolio</a>
+          <a href="company.html">Company Portal</a>
+          <a href="contacts.html">Contact Manager</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic Module -->
+  <script type="module" src="employee-app.js"></script>
+</body>
+</html>
